@@ -1,6 +1,7 @@
 const { Client, Intents } = require('discord.js');
+const { token } = require('./config.json');
 
-const content ="test \n test \n test \n"
+
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
@@ -8,6 +9,8 @@ const client = new Client({
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
+  client.user.setActivity("Pools, Hot Tubs, and Beaches",{type: "STREAMING", url: "https://www.twitch.tv/spoopykitt"});
+
 })
 
 const prefix = "!";
@@ -15,9 +18,8 @@ const Role = '982286554057809941'
 const MessageNumber = '982284004038439003'
 
 
-
 client.on("message", msg => {
-  if (msg.content.includes("!say")) {
+  if (msg.content.startsWith(prefix)) {
     msg.delete();
   }
 })
@@ -66,4 +68,4 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
 });
 
-client.login(process.env.TOKEN)
+client.login(token)
