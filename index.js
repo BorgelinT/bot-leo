@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Intents, Collection } = require('discord.js');
-const { token, guildId } = require('./config.json');
+const { token, guildId, roles} = require('./config.json');
 
 
 const client = new Client({
@@ -21,14 +21,41 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
+let emojinames = ["beeangery", "Angery", "OwOmen", "Borpagun", "nobuild", "Facepalm", "peepoparty", "trumpW", "😡"];
+
+client.on('ready', () => {
   console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
   client.user.setActivity('Pools, Hot Tubs, and Beaches',{type: 'STREAMING', url: 'https://www.twitch.tv/taylor_jevaux'});
+
+  const filter = (reaction, user) => {
+    return emojinames.includes(reaction.emoji.name);
+  };
+  let rolesChannel = client.channels.cache.get('982405191309619230');
+  rolesChannel.messages.fetch(`982444567158751262`).then(message => {
+
+    const collector = message.createReactionCollector({ filter }); 
+    collector.on('collect', (reaction, user) => {
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+      if (reaction.emoji.name !== "😡") {
+        message.guild.members.fetch(user.id).then(member => {
+                member.roles.add(roles[reaction.emoji.name]);  
+          });
+        console.log(roles.beeangery)
+      }
+      else if (reaction.emoji.name === "😡") {
+          for (let i = 0; i <emojinames.length -1; i++) {
+          message.guild.members.fetch(user.id).then(member => {
+            member.roles.remove(roles[emojinames[i]]);
+          });
+        }
+      }
+    });
+  });
 });
 
 // bot message handler
-client.on("message", msg => {
-    if (msg.content.includes("say")) {
+client.on('message', msg => {
+    if (msg.content.includes('say')) {
       msg.delete();
     }
   })
@@ -66,21 +93,11 @@ client.on('interactionCreate', async interaction => {
 });
 // role handler
 
-const lolRole = '982424141175083028';
-const valorantRole = '982423598335672330';
-const apexlegendsRole ='982424313808420914';
-const csgoRole ='982424395282808842';
-const fortniteRole ='982425150974754847';
-const warframeRole ='982425212228345917';
-const jackboxRole ='982425322916024350';
-const rustRole= '982424494163513344';
+
 
 
 const MessageNumber = '982444567158751262' // message on #roles
 
-const filter = (reaction, user) => {
-    return reaction.emoji.name === ':beeangery:' && user.id === message.author.id;
-};
 
 // let rolesChannel = client.channels.cache.get('982405191309619230');
 // rolesChannel.messages.fetch(`982444567158751262`);
