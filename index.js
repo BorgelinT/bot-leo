@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Intents, Collection } = require('discord.js');
-const { token, guildId } = require('./config.json');
+const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
+const { token, roles, emojis } = require('./config.json');
 
 
 const client = new Client({
@@ -20,127 +20,110 @@ for (const file of commandFiles) {
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
+const emojinames = ['beeangery', 'Angery', 'OwOmen', 'Borpagun', 'nobuild', 'highfive', 'peepoparty', 'trumpW', '😡'];
 
-client.once('ready', () => {
-  console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
-  client.user.setActivity('Pools, Hot Tubs, and Beaches',{type: 'STREAMING', url: 'https://www.twitch.tv/spoopykitt'});
+client.on('ready', () => {
+	console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
+	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/taylor_jevaux' });
+
+	const exampleEmbed = new MessageEmbed()
+		.setColor('#e98205')
+		.setTitle('Roolien tunnukset:')
+		.setDescription(
+			`<${emojis.beeangery}> = <@&${roles.beeangery}>\n<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n<${emojis.Angery}> = <@&${roles.Angery}>\n<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n<${emojis.nobuild}> = <@&${roles.nobuild}>\n<${emojis.highfive}> = <@&${roles.highfive}>\n<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
+		)
+		.setImage('https://i.imgur.com/swvOSqw.jpeg')
+		.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
+
+	const row = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setCustomId('primary')
+				.setLabel('Poista kaikki peliroolit')
+				.setStyle('DANGER'),
+		);
+
+	// todo: add all channel id:s to config
+	const rolesChannel = client.channels.cache.get('982405191309619230');
+	rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+		message.react(emojis.beeangery);
+		message.react(emojis.OwOmen);
+		message.react(emojis.Angery);
+		message.react(emojis.Borpagun);
+		message.react(emojis.nobuild);
+		message.react(emojis.highfive);
+		message.react(emojis.peepoparty);
+		message.react(emojis.trumpW);
+
+		const filter = (reaction, user) => {
+			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
+		};
+
+		const collector = message.createReactionCollector({ filter });
+		collector.on('collect', (reaction, user) => {
+			console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+			if (reaction.emoji.name !== '😡') {
+				message.guild.members.fetch(user.id).then(member => {
+					member.roles.add(roles[reaction.emoji.name]);
+				});
+				console.log(roles.beeangery);
+			}
+			else if (reaction.emoji.name === '😡') {
+				for (let i = 0; i < emojinames.length - 1; i++) {
+					message.guild.members.fetch(user.id).then(member => {
+						member.roles.remove(roles[emojinames[i]]);
+					});
+				}
+			}
+		});
+	});
 });
 
-// bot message handler
-client.on("message", msg => {
-    if (msg.content.includes("say")) {
-      msg.delete();
-    }
-  })
-  
-  client.on('message', message => {
-      if (message.content.startsWith('say')) {
-          let SayMessage = "";
-          let server = message.guild;
-          let user = server.members.cache.get(message.author.id);
-          let isAdmin = user.roles.cache.some(role => role.id === '261768424215150597');
-          if (message.author.bot) return;
-          // don't include command in bots message
-          SayMessage = message.content.slice(3).trim();
-          if (isAdmin) {
-            message.channel.send(SayMessage);
-          }
-      }
-  });
+client.on('interactionCreate', interaction => {
+	interaction.deferUpdate();
+	const member = interaction.member;
+	if (!interaction.isButton()) return;
+	console.log('here');
+	for (let i = 0; i < emojinames.length - 1; i++) {
+		member.roles.remove(roles[emojinames[i]]);
+	}
+	return;
+});
+// bot message handler (admins can talk using the bot)
+
+client.on('message', message => {
+	if (message.content.startsWith('say')) {
+		message.delete();
+		const server = message.guild;
+		const user = server.members.cache.get(message.author.id);
+		// admin only, TODO: add admin role id to config.js
+		const isAdmin = user.roles.cache.some(role => role.id === '261768424215150597');
+		if (message.author.bot) return;
+		// don't include command in bots message
+		const SayMessage = message.content.slice(3).trim();
+		if (isAdmin) {
+			message.channel.send(SayMessage);
+		}
+	}
+});
 
 
 // commands handler
+
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
-    const command = client.commands.get(interaction.commandName);
+	const command = client.commands.get(interaction.commandName);
 
 	if (!command) return;
 
 	try {
 		await command.execute(interaction);
-	} catch (error) {
+	}
+	catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'Jotain meni nyt pieleen!', ephemeral: true });
 	}
 });
-// role handler
 
-const lolRole = '982424141175083028';
-const valorantRole = '982423598335672330';
-const apexlegendsRole ='982424313808420914';
-const csgoRole ='982424395282808842';
-const fortniteRole ='982425150974754847';
-const warframeRole ='982425212228345917';
-const jackboxRole ='982425322916024350';
-const rustRole= '982424494163513344';
-
-
-const MessageNumber = '982444567158751262' // message on #roles
-
-client.on('messageReactionAdd', async (reaction, user) => {
-    console.log('Message Reaction Add Top');
-
-    let applyRole = async () => {
-        let emoji = reaction.emoji.name;
-        let role = reaction.message.guild.roles.cache.find;
-        let member = reaction.message.guild.members.cache.find(member => member.id == user.id);
-        if (role && member) {
-            if (emoji = 'beeangery') {
-                await member.roles.add(lolRole);
-            }
-            if (emoji = 'OwOmen') {
-                await member.roles.add(valorantRole);
-            }
-            if (emoji = 'angery') {
-                await member.roles.add(apexlegendsRole);
-            }
-            if (emoji = 'borpagun') {
-                await member.roles.add(csgoRole);
-            }
-            if (emoji = 'nobuild') {
-                await member.roles.add(fortniteRole);
-            }
-            if (emoji = 'Facepalm') {
-                await member.roles.add(warframeRole);
-            }
-            if (emoji = 'peepoparty') {
-                await member.roles.add(jackboxRole);
-            }
-            if (emoji = 'trumpW') {
-                await member.roles.add(rustRole);
-            }
-            if (emoji = '😡') {
-                await member.roles.remove(lolRole);
-                await member.roles.remove(valorantRole);
-                await member.roles.remove(apexlegendsRole,);
-                await member.roles.remove(csgoRole);
-                await member.roles.remove(fortniteRole);
-                await member.roles.remove(warframeRole);
-                await member.roles.remove(jackboxRole);
-                await member.roles.remove(rustRole);
-            }
-        }
-    }
-    if (reaction.message.partial) {
-        try {
-            let msg = await reaction.message.fetch()
-            console.log(msg.id);
-            if (msg.id === MessageNumber) {
-                applyRole();
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-    else {
-        console.log('Not a Partial');
-        if (reaction.message.id === MessageNumber) {
-            console.log('Not a Partial - applied')
-            applyRole();
-        }
-    }
-});
-
-client.login(token)
+client.login(token);
