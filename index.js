@@ -43,7 +43,6 @@ client.on('ready', () => {
 				.setStyle('DANGER'),
 		);
 
-	// todo: add all channel id:s to config
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
 		message.react(emojis.beeangery);
