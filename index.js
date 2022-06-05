@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Intents, Collection } = require('discord.js');
-const { token, roles } = require('./config.json');
+const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
+const { token, roles, emojis } = require('./config.json');
 
 
 const client = new Client({
@@ -20,20 +20,44 @@ for (const file of commandFiles) {
 	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
-
-const emojinames = ['beeangery', 'Angery', 'OwOmen', 'Borpagun', 'nobuild', 'Facepalm', 'peepoparty', 'trumpW', '😡'];
+const emojinames = ['beeangery', 'Angery', 'OwOmen', 'Borpagun', 'nobuild', 'highfive', 'peepoparty', 'trumpW', '😡'];
 
 client.on('ready', () => {
 	console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
 	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/taylor_jevaux' });
 
-	const filter = (reaction) => {
-		return emojinames.includes(reaction.emoji.name);
-	};
+	const exampleEmbed = new MessageEmbed()
+		.setColor('#e98205')
+		.setTitle('Roolien tunnukset:')
+		.setDescription(
+			`<${emojis.beeangery}> = <@&${roles.beeangery}>\n<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n<${emojis.Angery}> = <@&${roles.Angery}>\n<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n<${emojis.nobuild}> = <@&${roles.nobuild}>\n<${emojis.highfive}> = <@&${roles.highfive}>\n<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
+		)
+		.setImage('https://i.imgur.com/swvOSqw.jpeg')
+		.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
+
+	const row = new MessageActionRow()
+		.addComponents(
+			new MessageButton()
+				.setCustomId('primary')
+				.setLabel('Poista kaikki peliroolit')
+				.setStyle('DANGER'),
+		);
 
 	// todo: add all channel id:s to config
 	const rolesChannel = client.channels.cache.get('982405191309619230');
-	rolesChannel.messages.fetch('982444567158751262').then(message => {
+	rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+		message.react(emojis.beeangery);
+		message.react(emojis.OwOmen);
+		message.react(emojis.Angery);
+		message.react(emojis.Borpagun);
+		message.react(emojis.nobuild);
+		message.react(emojis.highfive);
+		message.react(emojis.peepoparty);
+		message.react(emojis.trumpW);
+
+		const filter = (reaction, user) => {
+			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
+		};
 
 		const collector = message.createReactionCollector({ filter });
 		collector.on('collect', (reaction, user) => {
@@ -55,6 +79,16 @@ client.on('ready', () => {
 	});
 });
 
+client.on('interactionCreate', interaction => {
+	interaction.deferUpdate();
+	const member = interaction.member;
+	if (!interaction.isButton()) return;
+	console.log('here');
+	for (let i = 0; i < emojinames.length - 1; i++) {
+		member.roles.remove(roles[emojinames[i]]);
+	}
+	return;
+});
 // bot message handler (admins can talk using the bot)
 
 client.on('message', message => {
