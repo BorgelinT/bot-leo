@@ -23,7 +23,7 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
   console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
-  client.user.setActivity('Pools, Hot Tubs, and Beaches',{type: 'STREAMING', url: 'https://www.twitch.tv/spoopykitt'});
+  client.user.setActivity('Pools, Hot Tubs, and Beaches',{type: 'STREAMING', url: 'https://www.twitch.tv/taylor_jevaux'});
 });
 
 // bot message handler
@@ -78,69 +78,84 @@ const rustRole= '982424494163513344';
 
 const MessageNumber = '982444567158751262' // message on #roles
 
-client.on('messageReactionAdd', async (reaction, user) => {
-    console.log('Message Reaction Add Top');
+const filter = (reaction, user) => {
+    return reaction.emoji.name === ':beeangery:' && user.id === message.author.id;
+};
 
-    let applyRole = async () => {
-        let emoji = reaction.emoji.name;
-        let role = reaction.message.guild.roles.cache.find;
-        let member = reaction.message.guild.members.cache.find(member => member.id == user.id);
-        if (role && member) {
-            if (emoji = 'beeangery') {
-                await member.roles.add(lolRole);
-            }
-            if (emoji = 'OwOmen') {
-                await member.roles.add(valorantRole);
-            }
-            if (emoji = 'angery') {
-                await member.roles.add(apexlegendsRole);
-            }
-            if (emoji = 'borpagun') {
-                await member.roles.add(csgoRole);
-            }
-            if (emoji = 'nobuild') {
-                await member.roles.add(fortniteRole);
-            }
-            if (emoji = 'Facepalm') {
-                await member.roles.add(warframeRole);
-            }
-            if (emoji = 'peepoparty') {
-                await member.roles.add(jackboxRole);
-            }
-            if (emoji = 'trumpW') {
-                await member.roles.add(rustRole);
-            }
-            if (emoji = '😡') {
-                await member.roles.remove(lolRole);
-                await member.roles.remove(valorantRole);
-                await member.roles.remove(apexlegendsRole,);
-                await member.roles.remove(csgoRole);
-                await member.roles.remove(fortniteRole);
-                await member.roles.remove(warframeRole);
-                await member.roles.remove(jackboxRole);
-                await member.roles.remove(rustRole);
-            }
-        }
-    }
-    if (reaction.message.partial) {
-        try {
-            let msg = await reaction.message.fetch()
-            console.log(msg.id);
-            if (msg.id === MessageNumber) {
-                applyRole();
-            }
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-    else {
-        console.log('Not a Partial');
-        if (reaction.message.id === MessageNumber) {
-            console.log('Not a Partial - applied')
-            applyRole();
-        }
-    }
-});
+// let rolesChannel = client.channels.cache.get('982405191309619230');
+// rolesChannel.messages.fetch(`982444567158751262`);
+
+// const collector = message.createReactionCollector({ filter });
+
+
+// collector.on('collect', (reaction, user) => {
+//     console.log(reaction)
+//     message.guild.members.fetch(user.id).then(member => {
+//          member.roles.add(lolRole);  
+//     });
+// });
+
+// client.on('messageReactionAdd', async (reaction, user) => {
+//     console.log('Message Reaction Add Top');
+
+//     let applyRole = async () => {
+//         let emoji = reaction.emoji.name;
+//         let role = reaction.message.guild.roles.cache.find;
+//         let member = reaction.message.guild.members.cache.find(member => member.id == user.id);
+//         if (role && member && (emoji = 'beeangery')) {
+//             await member.roles.add(lolRole);
+//         }
+//         if (role && member && (emoji = 'OwOmen')) {
+//             await member.roles.add(valorantRole);
+//         }
+//         if (role && member && (emoji = 'angery')) {
+//             await member.roles.add(apexlegendsRole);
+//         }
+//         if (role && member && (emoji = 'borpagun')) {
+//             await member.roles.add(csgoRole);
+//         }
+//         if (role && member && (emoji = 'nobuild')) {
+//             await member.roles.add(fortniteRole);
+//         }
+//         if (role && member && (emoji = 'Facepalm')) {
+//             await member.roles.add(warframeRole);
+//         }
+//         if (role && member && (emoji = 'peepoparty')) {
+//             await member.roles.add(jackboxRole);
+//         }
+//         if (role && member && (emoji = 'trumpW')) {
+//             await member.roles.add(rustRole);
+//         }
+//         if (emoji = '😡') {
+//             await member.roles.remove(lolRole);
+//             await member.roles.remove(valorantRole);
+//             await member.roles.remove(apexlegendsRole,);
+//             await member.roles.remove(csgoRole);
+//             await member.roles.remove(fortniteRole);
+//             await member.roles.remove(warframeRole);
+//             await member.roles.remove(jackboxRole);
+//             await member.roles.remove(rustRole);
+//         }
+//     }
+//     if (reaction.message.partial) {
+//         try {
+//             let msg = await reaction.message.fetch()
+//             console.log(msg.id);
+//             if (msg.id === MessageNumber) {
+//                 applyRole();
+//             }
+//         }
+//         catch (err) {
+//             console.log(err);
+//         }
+//     }
+//     else {
+//         console.log('Not a Partial');
+//         if (reaction.message.id === MessageNumber) {
+//             console.log('Not a Partial - applied')
+//             applyRole();
+//         }
+//     }
+// });
 
 client.login(token)
