@@ -40,7 +40,8 @@ client.on('ready', () => {
 			new MessageButton()
 				.setCustomId('primary')
 				.setLabel('Poista kaikki peliroolit')
-				.setStyle('DANGER'),
+				.setStyle('DANGER')
+				.setDisabled(true)
 		);
 
 	const rolesChannel = client.channels.cache.get('982405191309619230');
@@ -80,15 +81,16 @@ client.on('ready', () => {
 });
 
 client.on('interactionCreate', interaction => {
-	interaction.deferUpdate();
 	const member = interaction.member;
 	if (!interaction.isButton()) return;
+	interaction.deferUpdate();
 	console.log('here');
 	for (let i = 0; i < emojinames.length - 1; i++) {
 		member.roles.remove(roles[emojinames[i]]);
 	}
 	return;
 });
+
 // bot message handler (admins can talk using the bot)
 
 client.on('message', message => {
