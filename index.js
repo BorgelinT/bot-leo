@@ -24,7 +24,7 @@ const emojinames = ['beeangery', 'Angery', 'OwOmen', 'Borpagun', 'nobuild', 'hig
 
 client.on('ready', () => {
 	console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
-	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/taylor_jevaux' });
+	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/anichkayoga' });
 
 	const exampleEmbed = new MessageEmbed()
 		.setColor('#e98205')
@@ -44,15 +44,16 @@ client.on('ready', () => {
 		);
 
 	const rolesChannel = client.channels.cache.get('982405191309619230');
-	rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
-		message.react(emojis.beeangery);
-		message.react(emojis.OwOmen);
-		message.react(emojis.Angery);
-		message.react(emojis.Borpagun);
-		message.react(emojis.nobuild);
-		message.react(emojis.highfive);
-		message.react(emojis.peepoparty);
-		message.react(emojis.trumpW);
+	rolesChannel.messages.fetch('983144971366461490').then(message => {
+	// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+	// 	message.react(emojis.beeangery);
+	// 	message.react(emojis.OwOmen);
+	// 	message.react(emojis.Angery);
+	// 	message.react(emojis.Borpagun);
+	// 	message.react(emojis.nobuild);
+	// 	message.react(emojis.highfive);
+	// 	message.react(emojis.peepoparty);
+	// 	message.react(emojis.trumpW);
 
 		const filter = (reaction, user) => {
 			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
