@@ -26,6 +26,7 @@ client.on('ready', () => {
 	console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
 	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/anichkayoga' });
 
+	// eslint-disable-next-line no-unused-vars
 	const exampleEmbed = new MessageEmbed()
 		.setColor('#e98205')
 		.setTitle('Roolien tunnukset:')
@@ -35,6 +36,7 @@ client.on('ready', () => {
 		.setImage('https://i.imgur.com/swvOSqw.jpeg')
 		.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
 
+	// eslint-disable-next-line no-unused-vars
 	const row = new MessageActionRow()
 		.addComponents(
 			new MessageButton()
