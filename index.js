@@ -43,20 +43,20 @@ client.on('ready', () => {
 				.setCustomId('primary')
 				.setLabel('Poista kaikki peliroolit')
 				.setStyle('DANGER')
-				.setDisabled(true)
+				.setDisabled(true),
 		);
 
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
-	// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
-	// 	message.react(emojis.beeangery);
-	// 	message.react(emojis.OwOmen);
-	// 	message.react(emojis.Angery);
-	// 	message.react(emojis.Borpagun);
-	// 	message.react(emojis.nobuild);
-	// 	message.react(emojis.highfive);
-	// 	message.react(emojis.peepoparty);
-	// 	message.react(emojis.trumpW);
+		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+		// 	message.react(emojis.beeangery);
+		// 	message.react(emojis.OwOmen);
+		// 	message.react(emojis.Angery);
+		// 	message.react(emojis.Borpagun);
+		// 	message.react(emojis.nobuild);
+		// 	message.react(emojis.highfive);
+		// 	message.react(emojis.peepoparty);
+		// 	message.react(emojis.trumpW);
 
 		const filter = (reaction, user) => {
 			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
