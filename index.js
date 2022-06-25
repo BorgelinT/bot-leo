@@ -45,8 +45,10 @@ client.on('ready', () => {
 				.setStyle('DANGER')
 				.setDisabled(true),
 		);
-
 	const rolesChannel = client.channels.cache.get('982405191309619230');
+	const mem = client.channels.cache.get('370233724811345921');
+	const logo = mem.guild.iconURL();
+	mem.send({ files: [{ attachment: logo }] });
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
 		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
 		// 	message.react(emojis.beeangery);
@@ -101,11 +103,11 @@ client.on('message', message => {
 		const server = message.guild;
 		const user = server.members.cache.get(message.author.id);
 		// admin only, TODO: add admin role id to config.js
-		const isAdmin = user.roles.cache.some(role => role.id === '261768424215150597');
+		const hasHumanRights = user.roles.cache.some(role => role.id === '261768424215150597' || '783378591273582646');
 		if (message.author.bot) return;
 		// don't include command in bots message
 		const SayMessage = message.content.slice(3).trim();
-		if (isAdmin) {
+		if (hasHumanRights) {
 			message.channel.send(SayMessage);
 		}
 	}
