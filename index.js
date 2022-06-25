@@ -46,9 +46,10 @@ client.on('ready', () => {
 				.setDisabled(true),
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
-	const mem = client.channels.cache.get('370233724811345921');
-	const logo = mem.guild.iconURL();
-	mem.send({ files: [{ attachment: logo }] });
+	// wtf don't send this men
+	// const mem = client.channels.cache.get('370233724811345921');
+	// const logo = mem.guild.iconURL();
+	// mem.send({ files: [{ attachment: logo }] });
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
 		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
 		// 	message.react(emojis.beeangery);
