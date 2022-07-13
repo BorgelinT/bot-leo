@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
+const { request } = require('undici');
 const { token, roles, emojis } = require('./config.json');
 
 
@@ -46,10 +47,31 @@ client.on('ready', () => {
 				.setDisabled(true),
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
+	const botChannel = client.channels.cache.get('996730291370602626');
 	// wtf don't send this men
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
+	const apiurl = 'https://api.waifu.pics/sfw/waifu';
+
+	async function getJSONResponse(body) {
+		let fullBody = '';
+		for await (const data of body) {
+			fullBody += data.toString();
+			console.log(fullBody);
+		}
+		return JSON.parse(fullBody);
+	}
+
+
+	client.on('messageCreate', async msg => {
+		msg.react('😁');
+		const animetyty = await request(apiurl);
+		const image = await getJSONResponse(animetyty.body);
+		botChannel.send(image['url']);
+	});
+
+
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
 		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
 		// 	message.react(emojis.beeangery);
