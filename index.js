@@ -48,7 +48,6 @@ client.on('ready', () => {
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	const botChannel = client.channels.cache.get('996730291370602626');
-	// wtf don't send this men
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
@@ -117,8 +116,6 @@ client.on('interactionCreate', interaction => {
 	}
 	return;
 });
-
-// bot message handler (admins can talk using the bot)
 
 client.on('message', message => {
 	if (message.content.startsWith('say')) {
