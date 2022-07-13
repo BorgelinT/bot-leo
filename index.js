@@ -46,7 +46,6 @@ client.on('ready', () => {
 				.setDisabled(true),
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
-	// wtf don't send this men
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
