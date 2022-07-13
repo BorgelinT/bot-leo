@@ -95,7 +95,6 @@ client.on('interactionCreate', interaction => {
 	return;
 });
 
-
 client.on('message', message => {
 	if (message.content.startsWith('say')) {
 		message.delete();
