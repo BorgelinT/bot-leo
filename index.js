@@ -95,7 +95,6 @@ client.on('interactionCreate', interaction => {
 	return;
 });
 
-// bot message handler (admins can talk using the bot)
 
 client.on('message', message => {
 	if (message.content.startsWith('say')) {
