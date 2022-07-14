@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
 const { request } = require('undici');
-const { token, roles, emojis } = require('./config.json');
+const { token, roles, emojis, waifuAPI } = require('./config.json');
 
 
 const client = new Client({
@@ -51,25 +51,46 @@ client.on('ready', () => {
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
-	const apiurl = 'https://api.waifu.pics/sfw/waifu';
 
 	async function getJSONResponse(body) {
 		let fullBody = '';
 		for await (const data of body) {
 			fullBody += data.toString();
-			console.log(fullBody);
 		}
 		return JSON.parse(fullBody);
 	}
 
+	async function requestBuilder(type) {
+		const index = Math.floor(Math.random() * waifuAPI[type].length);
+		const category = waifuAPI[type][index];
+		console.log(category);
+		const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
+		return await getJSONResponse(animetyty.body);
+	}
+
+	const re = /anime|^2d$|2d |animetyty/;
+	const nsfw = /^nsfw$/;
 
 	client.on('messageCreate', async msg => {
-		msg.react('😁');
-		const animetyty = await request(apiurl);
-		const image = await getJSONResponse(animetyty.body);
-		botChannel.send(image['url']);
+		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=5v2ga12cn2jsi6e2n20axtidev6ayz&client_secret=xexr9l3menafoor5mpmcpaofzof0bo&grant_type=client_credentials');
+		// await getJSONResponse(tokenrequest.body).then(access_token => {
+		// 	const twitchToken = access_token;
+		// 	console.log(twitchToken);
+		// });
+		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer 2xgf1hh2m1djk6yr2298c0hvnle7yy', 'Client-Id': '5v2ga12cn2jsi6e2n20axtidev6ayz' }));
+		// const trequest = getJSONResponse(twitchRequest.body).then(user_name => console.log(user_name));
+		// console.log('twitch' + trequest);
+		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
+			msg.react('😳');
+			const image = await requestBuilder('sfw');
+			botChannel.send(image['url']);
+		}
+		if (nsfw.test(msg.content) && msg.author.id !== '982274221541580912') {
+			msg.react('🥵');
+			const image = await requestBuilder('nsfw');
+			botChannel.send(`|| ${image['url']} ||`);
+		}
 	});
-
 
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
 		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
@@ -93,7 +114,6 @@ client.on('ready', () => {
 				message.guild.members.fetch(user.id).then(member => {
 					member.roles.add(roles[reaction.emoji.name]);
 				});
-				console.log(roles.beeangery);
 			}
 			else if (reaction.emoji.name === '😡') {
 				for (let i = 0; i < emojinames.length - 1; i++) {
@@ -110,7 +130,6 @@ client.on('interactionCreate', interaction => {
 	const member = interaction.member;
 	if (!interaction.isButton()) return;
 	interaction.deferUpdate();
-	console.log('here');
 	for (let i = 0; i < emojinames.length - 1; i++) {
 		member.roles.remove(roles[emojinames[i]]);
 	}
