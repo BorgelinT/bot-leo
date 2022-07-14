@@ -98,7 +98,7 @@ client.on('ready', () => {
 		// console.log('twitch' + trequest);
 
 		// random anime tyts
-		if (Math.random() * 10 > 9 && msg.author.id !== '982274221541580912') {
+		if (Math.random() * 10 > 8 && msg.author.id !== '982274221541580912') {
 			const randomTimeout = Math.random() * 7200 * 1000;
 			const image = await requestBuilder('sfw');
 			setTimeout(() => {
@@ -109,7 +109,7 @@ client.on('ready', () => {
 		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
 			msg.react('😳');
 			if (msg.channel == genshinChannel || botChannel) {
-				if ((Math.random() * 10) > 9) {
+				if ((Math.random() * 10) > 8) {
 					const image = await requestBuilder('bonk');
 					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 				}
