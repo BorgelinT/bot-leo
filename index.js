@@ -101,7 +101,7 @@ client.on('ready', () => {
 		// console.log('twitch' + trequest);
 
 		// random anime tyts
-		if (Math.random() * 10 > 8) {
+		if (Math.random() * 100 > 98) {
 			const randomTimeout = Math.random() * 7200 * 1000;
 			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
 			let image = await requestBuilder('sfw');
