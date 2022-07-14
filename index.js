@@ -72,12 +72,12 @@ client.on('ready', () => {
 	const nsfw = /^nsfw$/;
 
 	client.on('messageCreate', async msg => {
-		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=5v2ga12cn2jsi6e2n20axtidev6ayz&client_secret=xexr9l3menafoor5mpmcpaofzof0bo&grant_type=client_credentials');
+		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
 		// await getJSONResponse(tokenrequest.body).then(access_token => {
 		// 	const twitchToken = access_token;
 		// 	console.log(twitchToken);
 		// });
-		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer 2xgf1hh2m1djk6yr2298c0hvnle7yy', 'Client-Id': '5v2ga12cn2jsi6e2n20axtidev6ayz' }));
+		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer ', 'Client-Id': '' }));
 		// const trequest = getJSONResponse(twitchRequest.body).then(user_name => console.log(user_name));
 		// console.log('twitch' + trequest);
 		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
