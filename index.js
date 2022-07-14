@@ -54,7 +54,7 @@ client.on('ready', () => {
 				.setDisabled(true),
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
-	const botChannel = client.channels.cache.get('996730291370602626');
+	const botChannel = client.channels.cache.get('834439402306011146');
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
@@ -83,8 +83,8 @@ client.on('ready', () => {
 		}
 	}
 
-	const re = /anime|^2d$|2d |animetyty/;
-	const nsfw = /^nsfw$/;
+	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu/i;
+	const nsfw = /^nsfw$/i;
 
 	client.on('messageCreate', async msg => {
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
