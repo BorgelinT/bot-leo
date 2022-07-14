@@ -106,7 +106,7 @@ client.on('ready', () => {
 			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
 			let image = await requestBuilder('sfw');
 
-			if (randomTimeout % 3 === 0) {
+			if (randomTimeout % 3 < 1) {
 				image = await requestBuilder('nsfw');
 			}
 			console.log('image url: ' + image['url']);
