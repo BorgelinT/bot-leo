@@ -88,6 +88,9 @@ client.on('ready', () => {
 	const nsfw = /^nsfw$|^hentai$/i;
 
 	client.on('messageCreate', async msg => {
+		if (msg.author.id !== '982274221541580912') {
+			return;
+		}
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
 		// await getJSONResponse(tokenrequest.body).then(access_token => {
 		// 	const twitchToken = access_token;
@@ -98,17 +101,21 @@ client.on('ready', () => {
 		// console.log('twitch' + trequest);
 
 		// random anime tyts
-		if (Math.random() * 10 > 8 && msg.author.id !== '982274221541580912') {
+		if (Math.random() * 10 > 8) {
 			const randomTimeout = Math.random() * 7200 * 1000;
-			const image = await requestBuilder('sfw');
+			let image = await requestBuilder('sfw');
+
+			if (randomTimeout % 3 === 0) {
+				image = await requestBuilder('nsfw');
+			}
 			setTimeout(() => {
 				genshinChannel.send('tää on mun tyttö ystävä :3 \n' + image['url'] + '\n');
 			}, randomTimeout);
 		}
-		// mans not leo bot and typing in bot/genshin
-		if (msg.author.id !== '982274221541580912' && msg.channel === (genshinChannel || botChannel)) {
+		// mans typing in bot/genshin
+		if (msg.channel === (genshinChannel || botChannel)) {
 			// random bonk
-			if ((re.test((msg.content) || nsfw.test(msg.content))) && (Math.random() * 10) > 8) {
+			if ((Math.random() * 15) > 13) {
 				const image = await requestBuilder('bonk');
 				msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 			}
