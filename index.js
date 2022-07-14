@@ -1,7 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
-const { token, roles, emojis } = require('./config.json');
+const { request } = require('undici');
+const { token, roles, emojis, waifuAPI } = require('./config.json');
 
 
 const client = new Client({
@@ -31,7 +32,14 @@ client.on('ready', () => {
 		.setColor('#e98205')
 		.setTitle('Roolien tunnukset:')
 		.setDescription(
-			`<${emojis.beeangery}> = <@&${roles.beeangery}>\n<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n<${emojis.Angery}> = <@&${roles.Angery}>\n<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n<${emojis.nobuild}> = <@&${roles.nobuild}>\n<${emojis.highfive}> = <@&${roles.highfive}>\n<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
+			`<${emojis.beeangery}> = <@&${roles.beeangery}>\n
+			<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n
+			<${emojis.Angery}> = <@&${roles.Angery}>\n
+			<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n
+			<${emojis.nobuild}> = <@&${roles.nobuild}>\n
+			<${emojis.highfive}> = <@&${roles.highfive}>\n
+			<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n
+			<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
 		)
 		.setImage('https://i.imgur.com/swvOSqw.jpeg')
 		.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
@@ -46,55 +54,119 @@ client.on('ready', () => {
 				.setDisabled(true),
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
+	const botChannel = client.channels.cache.get('834439402306011146');
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
-	rolesChannel.messages.fetch('983144971366461490').then(message => {
-		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
-		// 	message.react(emojis.beeangery);
-		// 	message.react(emojis.OwOmen);
-		// 	message.react(emojis.Angery);
-		// 	message.react(emojis.Borpagun);
-		// 	message.react(emojis.nobuild);
-		// 	message.react(emojis.highfive);
-		// 	message.react(emojis.peepoparty);
-		// 	message.react(emojis.trumpW);
 
+	async function getJSONResponse(body) {
+		let fullBody = '';
+		for await (const data of body) {
+			fullBody += data.toString();
+		}
+		return JSON.parse(fullBody);
+	}
+
+	async function requestBuilder(type) {
+		if (type !== 'bonk') {
+			const index = Math.floor(Math.random() * waifuAPI[type].length);
+			const category = waifuAPI[type][index];
+			console.log(category);
+			const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
+			return await getJSONResponse(animetyty.body);
+		}
+		else if (type === 'bonk') {
+			const category = type;
+			type = 'sfw';
+			const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
+			return await getJSONResponse(animetyty.body);
+		}
+	}
+
+	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu/i;
+	const nsfw = /^nsfw$/i;
+
+	client.on('messageCreate', async msg => {
+		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
+		// await getJSONResponse(tokenrequest.body).then(access_token => {
+		// 	const twitchToken = access_token;
+		// 	console.log(twitchToken);
+		// });
+		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer ', 'Client-Id': '' }));
+		// const trequest = getJSONResponse(twitchRequest.body).then(user_name => console.log(user_name));
+		// console.log('twitch' + trequest);
+
+		// random anime tyts
+		if (Math.random() * 10 > 9 && msg.author.id !== '982274221541580912') {
+			const randomTimeout = Math.random() * 7200 * 1000;
+			const image = await requestBuilder('sfw');
+			setTimeout(() => {
+				botChannel.send(image['url']);
+			}, randomTimeout);
+		}
+
+		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
+			msg.react('😳');
+			if (msg.channel.id === '996730291370602626') {
+				if ((Math.random() * 10) > 9) {
+					const image = await requestBuilder('bonk');
+					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
+				}
+				else {
+					const image = await requestBuilder('sfw');
+					msg.channel.send(image['url']);
+				}
+			}
+		}
+
+		if (nsfw.test(msg.content) && msg.author.id !== '982274221541580912') {
+			msg.react('🥵');
+			if (msg.channel.id === '996730291370602626') {
+				const image = await requestBuilder('nsfw');
+				msg.channel.send(`|| ${image['url']} ||`);
+			}
+		}
+	});
+	// send role message and react with emojis corresponding to the roles:
+	// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+	// 	message.react(emojis.beeangery);
+	// 	message.react(emojis.OwOmen);
+	// 	message.react(emojis.Angery);
+	// 	message.react(emojis.Borpagun);
+	// 	message.react(emojis.nobuild);
+	// 	message.react(emojis.highfive);
+	// 	message.react(emojis.peepoparty);
+	// 	message.react(emojis.trumpW);
+
+	// get reactionmessage and add reaction collector
+	rolesChannel.messages.fetch('983144971366461490').then(message => {
+		// create filter for which emojis to collect
 		const filter = (reaction, user) => {
 			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
 		};
-
+		// init reaction collector
 		const collector = message.createReactionCollector({ filter });
 		collector.on('collect', (reaction, user) => {
 			console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-			if (reaction.emoji.name !== '😡') {
-				message.guild.members.fetch(user.id).then(member => {
-					member.roles.add(roles[reaction.emoji.name]);
-				});
-				console.log(roles.beeangery);
-			}
-			else if (reaction.emoji.name === '😡') {
-				for (let i = 0; i < emojinames.length - 1; i++) {
-					message.guild.members.fetch(user.id).then(member => {
-						member.roles.remove(roles[emojinames[i]]);
-					});
-				}
-			}
+			message.guild.members.fetch(user.id).then(member => {
+				member.roles.add(roles[reaction.emoji.name]);
+			});
 		});
 	});
 });
 
+// role remover button
 client.on('interactionCreate', interaction => {
 	const member = interaction.member;
 	if (!interaction.isButton()) return;
 	interaction.deferUpdate();
-	console.log('here');
 	for (let i = 0; i < emojinames.length - 1; i++) {
 		member.roles.remove(roles[emojinames[i]]);
 	}
 	return;
 });
 
+// make bot say a funny :DD haHAH
 client.on('message', message => {
 	if (message.content.startsWith('say')) {
 		message.delete();
