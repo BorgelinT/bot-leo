@@ -103,11 +103,13 @@ client.on('ready', () => {
 		// random anime tyts
 		if (Math.random() * 10 > 8) {
 			const randomTimeout = Math.random() * 7200 * 1000;
+			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
 			let image = await requestBuilder('sfw');
 
 			if (randomTimeout % 3 === 0) {
 				image = await requestBuilder('nsfw');
 			}
+			console.log('image url: ' + image['url']);
 			setTimeout(() => {
 				genshinChannel.send('tää on mun tyttö ystävä :3 \n' + image['url'] + '\n');
 			}, randomTimeout);
