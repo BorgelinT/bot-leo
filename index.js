@@ -106,7 +106,7 @@ client.on('ready', () => {
 			}, randomTimeout);
 		}
 		// mans not leo bot and typing in bot/genshin
-		if (msg.author.id !== '982274221541580912' && msg.channel == genshinChannel || botChannel) {
+		if (msg.author.id !== '982274221541580912' && msg.channel === (genshinChannel || botChannel)) {
 			// random bonk
 			if (re.test((msg.content) || nsfw.test(msg.content)) && (Math.random() * 10) > 8) {
 				const image = await requestBuilder('bonk');
