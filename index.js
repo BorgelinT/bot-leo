@@ -88,7 +88,7 @@ client.on('ready', () => {
 	const nsfw = /^nsfw$|^hentai$/i;
 
 	client.on('messageCreate', async msg => {
-		if (msg.author.id !== '982274221541580912') {
+		if (msg.author.id === '982274221541580912') {
 			return;
 		}
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
