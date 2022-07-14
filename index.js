@@ -84,8 +84,8 @@ client.on('ready', () => {
 		}
 	}
 
-	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu/i;
-	const nsfw = /^nsfw$/i;
+	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
+	const nsfw = /^nsfw$|^hentai$/i;
 
 	client.on('messageCreate', async msg => {
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
