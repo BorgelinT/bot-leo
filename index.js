@@ -55,6 +55,7 @@ client.on('ready', () => {
 		);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	const botChannel = client.channels.cache.get('834439402306011146');
+	const genshinChannel = client.channels.cache.get('786653057885667328');
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
@@ -101,13 +102,13 @@ client.on('ready', () => {
 			const randomTimeout = Math.random() * 7200 * 1000;
 			const image = await requestBuilder('sfw');
 			setTimeout(() => {
-				botChannel.send(image['url']);
+				genshinChannel.send(image['url']);
 			}, randomTimeout);
 		}
 
 		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
 			msg.react('😳');
-			if (msg.channel.id === '996730291370602626') {
+			if (msg.channel == genshinChannel || botChannel) {
 				if ((Math.random() * 10) > 9) {
 					const image = await requestBuilder('bonk');
 					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
