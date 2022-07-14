@@ -105,24 +105,22 @@ client.on('ready', () => {
 				genshinChannel.send(image['url']);
 			}, randomTimeout);
 		}
-
-		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
-			msg.react('😳');
-			if (msg.channel == genshinChannel || botChannel) {
-				if ((Math.random() * 10) > 8) {
-					const image = await requestBuilder('bonk');
-					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
-				}
-				else {
-					const image = await requestBuilder('sfw');
-					msg.channel.send(image['url']);
-				}
+		// mans not leo bot and typing in bot/genshin
+		if (msg.author.id !== '982274221541580912' && msg.channel == genshinChannel || botChannel) {
+			// random bonk
+			if (re.test((msg.content) || nsfw.test(msg.content)) && (Math.random() * 10) > 8) {
+				const image = await requestBuilder('bonk');
+				msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 			}
-		}
-
-		if (nsfw.test(msg.content) && msg.author.id !== '982274221541580912') {
-			msg.react('🥵');
-			if (msg.channel.id === botChannel || genshinChannel) {
+			// matches sfw regex
+			else if (re.test(msg.content)) {
+				msg.react('😳');
+				const image = await requestBuilder('sfw');
+				msg.channel.send(image['url']);
+			}
+			// matches nsfw regex
+			else if (nsfw.test(msg.content)) {
+				msg.react('🥵');
 				const image = await requestBuilder('nsfw');
 				msg.channel.send(`|| ${image['url']} ||`);
 			}
