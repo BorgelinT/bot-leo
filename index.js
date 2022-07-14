@@ -102,7 +102,7 @@ client.on('ready', () => {
 			const randomTimeout = Math.random() * 7200 * 1000;
 			const image = await requestBuilder('sfw');
 			setTimeout(() => {
-				genshinChannel.send('tää on mun tyttö ystävä :3' + image['url']);
+				genshinChannel.send('tää on mun tyttö ystävä :3 \n' + image['url'] + '\n');
 			}, randomTimeout);
 		}
 		// mans not leo bot and typing in bot/genshin
