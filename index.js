@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow, MessageAttachment } = require('discord.js');
+const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, emojis, waifuAPI } = require('./config.json');
 
@@ -53,8 +53,8 @@ client.on('ready', () => {
 				.setStyle('DANGER')
 				.setDisabled(true),
 		);
-		const rolesChannel = client.channels.cache.get('982405191309619230');
-		const botChannel = client.channels.cache.get('996730291370602626');
+	const rolesChannel = client.channels.cache.get('982405191309619230');
+	const botChannel = client.channels.cache.get('996730291370602626');
 	// const mem = client.channels.cache.get('370233724811345921');
 	// const logo = mem.guild.iconURL();
 	// mem.send({ files: [{ attachment: logo }] });
@@ -102,15 +102,15 @@ client.on('ready', () => {
 			const image = await requestBuilder('sfw');
 			setTimeout(() => {
 				botChannel.send(image['url']);
-			}, randomTimeout)		
+			}, randomTimeout);
 		}
 
 		if (re.test(msg.content) && msg.author.id !== '982274221541580912') {
 			msg.react('😳');
 			if (msg.channel.id === '996730291370602626') {
 				if ((Math.random() * 10) > 9) {
-					const image = await requestBuilder('bonk')
-					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n')
+					const image = await requestBuilder('bonk');
+					msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 				}
 				else {
 					const image = await requestBuilder('sfw');
@@ -127,35 +127,35 @@ client.on('ready', () => {
 			}
 		}
 	});
-		// send role message and react with emojis corresponding to the roles:
-		// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
-		// 	message.react(emojis.beeangery);
-		// 	message.react(emojis.OwOmen);
-		// 	message.react(emojis.Angery);
-		// 	message.react(emojis.Borpagun);
-		// 	message.react(emojis.nobuild);
-		// 	message.react(emojis.highfive);
-		// 	message.react(emojis.peepoparty);
-		// 	message.react(emojis.trumpW);
+	// send role message and react with emojis corresponding to the roles:
+	// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
+	// 	message.react(emojis.beeangery);
+	// 	message.react(emojis.OwOmen);
+	// 	message.react(emojis.Angery);
+	// 	message.react(emojis.Borpagun);
+	// 	message.react(emojis.nobuild);
+	// 	message.react(emojis.highfive);
+	// 	message.react(emojis.peepoparty);
+	// 	message.react(emojis.trumpW);
 
-		// get reactionmessage and add reaction collector
-		rolesChannel.messages.fetch('983144971366461490').then(message => {
-		// create filter for which emojis to collect 
+	// get reactionmessage and add reaction collector
+	rolesChannel.messages.fetch('983144971366461490').then(message => {
+		// create filter for which emojis to collect
 		const filter = (reaction, user) => {
 			return emojinames.includes(reaction.emoji.name) && user.id !== message.author.id;
 		};
-		// init reaction collector 
+		// init reaction collector
 		const collector = message.createReactionCollector({ filter });
 		collector.on('collect', (reaction, user) => {
 			console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-				message.guild.members.fetch(user.id).then(member => {
-					member.roles.add(roles[reaction.emoji.name]);
-				});
+			message.guild.members.fetch(user.id).then(member => {
+				member.roles.add(roles[reaction.emoji.name]);
+			});
 		});
 	});
 });
 
-// role remover button 
+// role remover button
 client.on('interactionCreate', interaction => {
 	const member = interaction.member;
 	if (!interaction.isButton()) return;
