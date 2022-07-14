@@ -122,7 +122,7 @@ client.on('ready', () => {
 
 		if (nsfw.test(msg.content) && msg.author.id !== '982274221541580912') {
 			msg.react('🥵');
-			if (msg.channel.id === '996730291370602626') {
+			if (msg.channel.id === botChannel || genshinChannel) {
 				const image = await requestBuilder('nsfw');
 				msg.channel.send(`|| ${image['url']} ||`);
 			}
