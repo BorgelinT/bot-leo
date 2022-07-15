@@ -90,7 +90,6 @@ client.on('ready', () => {
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
-			console.log('Caught bot message, exiting...');
 			return;
 		}
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
@@ -104,7 +103,9 @@ client.on('ready', () => {
 		// doge
 		if (doge.test(msg.content)) {
 			msg.react('<:L_:509019927282188288>');
-			msg.channel.send('http://shibe.online/api/shibes'[0]);
+			let dogeImg = await request('http://shibe.online/api/shibes');
+			dogeImg = await getJSONResponse(dogeImg.body);
+			msg.channel.send(dogeImg[0]);
 		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
