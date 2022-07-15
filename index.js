@@ -103,6 +103,17 @@ client.on('ready', () => {
 		// doge
 		if (doge.test(msg.content)) {
 			msg.react('<:L_:509019927282188288>');
+			if (Math.random() < 0.25) {
+				let dogeImg = await request('http://shibe.online/api/shibes');
+				dogeImg = await getJSONResponse(dogeImg.body);
+				msg.channel.send(dogeImg[0]);
+			}
+			else {
+				let dogeImg = await request('https://random.dog/woof.json');
+				dogeImg = await getJSONResponse(dogeImg.body);
+				msg.channel.send(dogeImg['url']);
+			}
+
 			let dogeImg = await request('http://shibe.online/api/shibes');
 			dogeImg = await getJSONResponse(dogeImg.body);
 			msg.channel.send(dogeImg[0]);
