@@ -86,7 +86,8 @@ client.on('ready', () => {
 
 	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
 	const nsfw = /^nsfw$|^hentai$/i;
-	const doge = /dog|doge|shiba|shibe|koira|koiro|🐕/i;
+	const doge = /dog|doge|shiba|shibe|koira|hau|koiro/i;
+	const cat = /kitten|kissa|kassi|miau|:3|miu|cat/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
@@ -114,18 +115,28 @@ client.on('ready', () => {
 				msg.channel.send(dogeImg['url']);
 			}
 		}
+		if (cat.test(msg.content)) {
+			let catImg = await request('https://aws.random.cat/meow');
+			catImg = await getJSONResponse(catImg.body);
+			msg.channel.send(catImg['file']);
+		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
+			const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
 			const randomTimeout = Math.random() * 7200 * 1000;
 			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
-			let image = await requestBuilder('sfw');
-
+			let image;
 			if (randomTimeout % 3 < 1) {
 				image = await requestBuilder('nsfw');
 			}
+			else {
+				image = await requestBuilder('sfw');
+			}
 			console.log('image url: ' + image['url']);
 			setTimeout(() => {
-				genshinChannel.send('tää on mun tyttö ystävä :3 \n' + image['url'] + '\n');
+				const i = Math.random() * (msgs.length + 1);
+				const randomMsg = msgs[i];
+				genshinChannel.send(`${randomMsg}\n ${image['url']}\n`);
 			}, randomTimeout);
 		}
 		// mans typing in bot/genshin
