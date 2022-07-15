@@ -113,10 +113,6 @@ client.on('ready', () => {
 				dogeImg = await getJSONResponse(dogeImg.body);
 				msg.channel.send(dogeImg['url']);
 			}
-
-			let dogeImg = await request('http://shibe.online/api/shibes');
-			dogeImg = await getJSONResponse(dogeImg.body);
-			msg.channel.send(dogeImg[0]);
 		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
