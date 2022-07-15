@@ -89,6 +89,7 @@ client.on('ready', () => {
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
+			console.log('Caught bot message, exiting...');
 			return;
 		}
 		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
@@ -115,14 +116,14 @@ client.on('ready', () => {
 			}, randomTimeout);
 		}
 		// mans typing in bot/genshin
-		if (msg.channel === (genshinChannel || botChannel)) {
+		if (msg.channel === genshinChannel || msg.channel === botChannel) {
 			// random bonk
 			if ((Math.random() * 15) > 13) {
 				const image = await requestBuilder('bonk');
 				msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 			}
 			// matches sfw regex
-			else if (re.test(msg.content)) {
+			if (re.test(msg.content)) {
 				msg.react('😳');
 				const image = await requestBuilder('sfw');
 				msg.channel.send(image['url']);
