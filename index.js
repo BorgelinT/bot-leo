@@ -86,6 +86,7 @@ client.on('ready', () => {
 
 	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
 	const nsfw = /^nsfw$|^hentai$/i;
+	const doge = /dog|doge|shiba|shibe|koira|koiro|🐕/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
@@ -100,7 +101,11 @@ client.on('ready', () => {
 		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer ', 'Client-Id': '' }));
 		// const trequest = getJSONResponse(twitchRequest.body).then(user_name => console.log(user_name));
 		// console.log('twitch' + trequest);
-
+		// doge
+		if (doge.test(msg.content)) {
+			msg.react('<:L_:509019927282188288>');
+			msg.channel.send('http://shibe.online/api/shibes'[0]);
+		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
 			const randomTimeout = Math.random() * 7200 * 1000;
