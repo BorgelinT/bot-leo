@@ -1,8 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Intents, Collection, MessageButton, MessageEmbed, MessageActionRow } = require('discord.js');
+const { Client, Intents, Collection } = require('discord.js');
 const { request } = require('undici');
-const { token, roles, emojis, waifuAPI } = require('./config.json');
+const { token, roles, waifuAPI } = require('./config.json');
 
 
 const client = new Client({
@@ -27,38 +27,9 @@ client.on('ready', () => {
 	console.log(`Kirjauduttu sisään käyttäjänä ${client.user.tag}!`);
 	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/anichkayoga' });
 
-	// eslint-disable-next-line no-unused-vars
-	// const exampleEmbed = new MessageEmbed()
-	// 	.setColor('#e98205')
-	// 	.setTitle('Roolien tunnukset:')
-	// 	.setDescription(
-	// 		`<${emojis.beeangery}> = <@&${roles.beeangery}>\n
-	// 		<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n
-	// 		<${emojis.Angery}> = <@&${roles.Angery}>\n
-	// 		<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n
-	// 		<${emojis.nobuild}> = <@&${roles.nobuild}>\n
-	// 		<${emojis.highfive}> = <@&${roles.highfive}>\n
-	// 		<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n
-	// 		<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
-	// 	)
-	// 	.setImage('https://i.imgur.com/swvOSqw.jpeg')
-	// 	.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
-
-	// // eslint-disable-next-line no-unused-vars
-	// const row = new MessageActionRow()
-	// 	.addComponents(
-	// 		new MessageButton()
-	// 			.setCustomId('primary')
-	// 			.setLabel('Poista kaikki peliroolit')
-	// 			.setStyle('DANGER')
-	// 			.setDisabled(true),
-	// 	);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	const botChannel = client.channels.cache.get('834439402306011146');
 	const genshinChannel = client.channels.cache.get('786653057885667328');
-	// const mem = client.channels.cache.get('370233724811345921');
-	// const logo = mem.guild.iconURL();
-	// mem.send({ files: [{ attachment: logo }] });
 
 	async function getJSONResponse(body) {
 		let fullBody = '';
@@ -88,20 +59,16 @@ client.on('ready', () => {
 	const doge = /dog|doge|shiba|shibe|koira|hau|koiro/i;
 	const cat = /kitten|kissa|kassi|miau|:3|miu|cat/i;
 	const duck = /duck|ankka|kvaak|ankk/i;
+	const bird = /bird|birb|lintu|tsirp/i;
+	const redpanda = /kultapanda|red panda|panda|pikkupanda/i;
+	const raccoon = /pesukarhu|thieving|rocky|raccoon|sly/i;
+	const kangaroo = /kenguru|australia|boing|kangaroo/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
 			return;
 		}
-		// const tokenrequest = await request('https://id.twitch.tv/oauth2/token?client_id=&client_secret=&grant_type=client_credentials');
-		// await getJSONResponse(tokenrequest.body).then(access_token => {
-		// 	const twitchToken = access_token;
-		// 	console.log(twitchToken);
-		// });
-		// const twitchRequest = await request('https://api.twitch.tv/helix/streams', ({ 'Authorization': 'Bearer ', 'Client-Id': '' }));
-		// const trequest = getJSONResponse(twitchRequest.body).then(user_name => console.log(user_name));
-		// console.log('twitch' + trequest);
-		// doge
+		// message collectors for each regex
 		if (doge.test(msg.content)) {
 			msg.react('<:L_:509019927282188288>');
 			if (Math.random() < 0.25) {
@@ -124,6 +91,26 @@ client.on('ready', () => {
 			let img = await request('https://random-d.uk/api/random');
 			img = await getJSONResponse(img.body);
 			msg.channel.send(img['url']);
+		}
+		if (bird.test(msg.content)) {
+			let img = await request('https://some-random-api.ml/animal/birb');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['image']);
+		}
+		if (redpanda.test(msg.content)) {
+			let img = await request('https://some-random-api.ml/animal/red_panda');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['image']);
+		}
+		if (raccoon.test(msg.content)) {
+			let img = await request('https://some-random-api.ml/animal/raccoon');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['image']);
+		}
+		if (kangaroo.test(msg.content)) {
+			let img = await request('https://some-random-api.ml/animal/kangaroo');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['image']);
 		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
