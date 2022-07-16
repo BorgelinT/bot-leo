@@ -28,31 +28,31 @@ client.on('ready', () => {
 	client.user.setActivity('Pools, Hot Tubs, and Beaches', { type: 'STREAMING', url: 'https://www.twitch.tv/anichkayoga' });
 
 	// eslint-disable-next-line no-unused-vars
-	const exampleEmbed = new MessageEmbed()
-		.setColor('#e98205')
-		.setTitle('Roolien tunnukset:')
-		.setDescription(
-			`<${emojis.beeangery}> = <@&${roles.beeangery}>\n
-			<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n
-			<${emojis.Angery}> = <@&${roles.Angery}>\n
-			<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n
-			<${emojis.nobuild}> = <@&${roles.nobuild}>\n
-			<${emojis.highfive}> = <@&${roles.highfive}>\n
-			<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n
-			<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
-		)
-		.setImage('https://i.imgur.com/swvOSqw.jpeg')
-		.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
+	// const exampleEmbed = new MessageEmbed()
+	// 	.setColor('#e98205')
+	// 	.setTitle('Roolien tunnukset:')
+	// 	.setDescription(
+	// 		`<${emojis.beeangery}> = <@&${roles.beeangery}>\n
+	// 		<${emojis.OwOmen}> = <@&${roles.OwOmen}>\n
+	// 		<${emojis.Angery}> = <@&${roles.Angery}>\n
+	// 		<${emojis.Borpagun}> = <@&${roles.Borpagun}>\n
+	// 		<${emojis.nobuild}> = <@&${roles.nobuild}>\n
+	// 		<${emojis.highfive}> = <@&${roles.highfive}>\n
+	// 		<${emojis.peepoparty}> = <@&${roles.peepoparty}>\n
+	// 		<${emojis.trumpW}> = <@&${roles.trumpW}>\n`,
+	// 	)
+	// 	.setImage('https://i.imgur.com/swvOSqw.jpeg')
+	// 	.setFooter({ text: 'Lisää itsesi rooliin reagoimalla alta:', iconURL: 'https://i.imgur.com/V1pm6qE.png' });
 
-	// eslint-disable-next-line no-unused-vars
-	const row = new MessageActionRow()
-		.addComponents(
-			new MessageButton()
-				.setCustomId('primary')
-				.setLabel('Poista kaikki peliroolit')
-				.setStyle('DANGER')
-				.setDisabled(true),
-		);
+	// // eslint-disable-next-line no-unused-vars
+	// const row = new MessageActionRow()
+	// 	.addComponents(
+	// 		new MessageButton()
+	// 			.setCustomId('primary')
+	// 			.setLabel('Poista kaikki peliroolit')
+	// 			.setStyle('DANGER')
+	// 			.setDisabled(true),
+	// 	);
 	const rolesChannel = client.channels.cache.get('982405191309619230');
 	const botChannel = client.channels.cache.get('834439402306011146');
 	const genshinChannel = client.channels.cache.get('786653057885667328');
@@ -87,6 +87,7 @@ client.on('ready', () => {
 	const nsfw = /^nsfw$|^hentai$/i;
 	const doge = /dog|doge|shiba|shibe|koira|hau|koiro/i;
 	const cat = /kitten|kissa|kassi|miau|:3|miu|cat/i;
+	const duck = /duck|ankka|kvaak/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
@@ -119,9 +120,13 @@ client.on('ready', () => {
 			catImg = await getJSONResponse(catImg.body);
 			msg.channel.send(catImg['file']);
 		}
+		if (duck.test(msg.content)) {
+			let img = await request('https://random-d.uk/api/random');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['url']);
+		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
-			const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
 			const randomTimeout = Math.random() * 7200 * 1000;
 			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
 			let image;
@@ -133,8 +138,10 @@ client.on('ready', () => {
 			}
 			console.log('image url: ' + image['url']);
 			setTimeout(() => {
+				const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
 				const i = Math.random() * (msgs.length + 1);
 				const randomMsg = msgs[i];
+				console.log('randommsg:' + randomMsg);
 				genshinChannel.send(`${randomMsg}\n ${image['url']}\n`);
 			}, randomTimeout);
 		}
