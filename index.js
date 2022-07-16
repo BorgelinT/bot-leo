@@ -69,18 +69,17 @@ client.on('ready', () => {
 	}
 
 	async function requestBuilder(type) {
-		if (type !== 'bonk') {
-			const index = Math.floor(Math.random() * waifuAPI[type].length);
-			const category = waifuAPI[type][index];
-			console.log(category);
-			const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
-			return await getJSONResponse(animetyty.body);
-		}
-		else if (type === 'bonk') {
+		if (type === 'bonk') {
 			const category = type;
 			type = 'sfw';
 			const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
 			return await getJSONResponse(animetyty.body);
+		}
+		else {
+			const index = Math.floor(Math.random() * waifuAPI[type].length);
+			const category = waifuAPI[type][index];
+			const payload = await request(`${waifuAPI.url}${type}/${category}`);
+			return await getJSONResponse(payload.body);
 		}
 	}
 
