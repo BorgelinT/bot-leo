@@ -66,7 +66,7 @@ client.on('ready', () => {
 	const kulli = /cock|kulli|pippeli/i;
 
 	client.on('messageCreate', async msg => {
-		if (msg.author.id === '982274221541580912') {
+		if (msg.author.id === '982274221541580912' || msg.channelId === '370233724811345921') {
 			return;
 		}
 		// message collectors for each regex
@@ -119,7 +119,7 @@ client.on('ready', () => {
 			msg.channel.send(img['image']);
 		}
 		// random anime tyts
-		if (Math.random() * 100 > 98) {
+		if (Math.random() > 0.5) {
 			const randomTimeout = Math.random() * 7200 * 1000;
 			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
 			let image;
@@ -203,7 +203,6 @@ client.on('message', message => {
 		}
 	}
 });
-
 
 // commands handler
 
