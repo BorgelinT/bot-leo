@@ -63,6 +63,7 @@ client.on('ready', () => {
 	const redpanda = /kultapanda|red panda|panda|pikkupanda/i;
 	const raccoon = /pesukarhu|thieving|rocky|raccoon|sly/i;
 	const kangaroo = /kenguru|australia|boing|kangaroo/i;
+	const kulli = /cock|kulli|pippeli/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
@@ -112,6 +113,11 @@ client.on('ready', () => {
 			img = await getJSONResponse(img.body);
 			msg.channel.send(img['image']);
 		}
+		if (kulli.test(msg.content)) {
+			let img = await request('http://dicks-api.herokuapp.com/dicks/2');
+			img = await getJSONResponse(img.body);
+			msg.channel.send(img['image']);
+		}
 		// random anime tyts
 		if (Math.random() * 100 > 98) {
 			const randomTimeout = Math.random() * 7200 * 1000;
@@ -126,8 +132,7 @@ client.on('ready', () => {
 			console.log('image url: ' + image['url']);
 			setTimeout(() => {
 				const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
-				const i = Math.random() * (msgs.length + 1);
-				const randomMsg = msgs[i];
+				const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
 				console.log('randommsg:' + randomMsg);
 				genshinChannel.send(`${randomMsg}\n ${image['url']}\n`);
 			}, randomTimeout);
