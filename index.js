@@ -158,16 +158,6 @@ client.on('ready', () => {
 			}
 		}
 	});
-	// send role message and react with emojis corresponding to the roles:
-	// rolesChannel.send({ embeds: [exampleEmbed], components: [row] }).then(message => {
-	// 	message.react(emojis.beeangery);
-	// 	message.react(emojis.OwOmen);
-	// 	message.react(emojis.Angery);
-	// 	message.react(emojis.Borpagun);
-	// 	message.react(emojis.nobuild);
-	// 	message.react(emojis.highfive);
-	// 	message.react(emojis.peepoparty);
-	// 	message.react(emojis.trumpW);
 
 	// get reactionmessage and add reaction collector
 	rolesChannel.messages.fetch('983144971366461490').then(message => {
