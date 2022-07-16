@@ -87,7 +87,7 @@ client.on('ready', () => {
 	const nsfw = /^nsfw$|^hentai$/i;
 	const doge = /dog|doge|shiba|shibe|koira|hau|koiro/i;
 	const cat = /kitten|kissa|kassi|miau|:3|miu|cat/i;
-	const duck = /duck|ankka|kvaak/i;
+	const duck = /duck|ankka|kvaak|ankk/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912') {
