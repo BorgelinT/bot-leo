@@ -1,9 +1,10 @@
+/* eslint-disable no-prototype-builtins */
 const fs = require('node:fs');
 const path = require('node:path');
+const fetch = require('cross-fetch');
 const { Client, Intents, Collection } = require('discord.js');
 const { request } = require('undici');
-const { token, roles, waifuAPI } = require('./config.json');
-
+const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
@@ -13,6 +14,7 @@ const client = new Client({
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const leksa_api = 'https://api-inference.huggingface.co/models/Thoumey/DialoGPT-small-Leksa';
 
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
@@ -63,11 +65,38 @@ client.on('ready', () => {
 	const redpanda = /kultapanda|red panda|panda|pikkupanda/i;
 	const raccoon = /pesukarhu|thieving|rocky|raccoon|sly/i;
 	const kangaroo = /kenguru|australia|boing|kangaroo/i;
-	const kulli = /cock|kulli|pippeli/i;
 
 	client.on('messageCreate', async msg => {
-		if (msg.author.id === '982274221541580912' || msg.channelId === '370233724811345921') {
+		if (msg.author.bot || msg.channelId === '370233724811345921') {
 			return;
+		}
+		if (msg.mentions.has(client.user)) {
+			// form payload
+			const payload = {
+				inputs: {
+					text: msg.content,
+				},
+			};
+			// form the request headers with Hugging Face API key
+			const headers = {
+				'Authorization': 'Bearer ' + HuggingFaceAPIKey,
+			};
+
+			const response = await fetch(leksa_api, {
+				method: 'post',
+				body: JSON.stringify(payload),
+				headers: headers,
+			});
+			const data = await response.json();
+			let botResponse = '';
+			if (data.hasOwnProperty('generated_text')) {
+				botResponse = data.generated_text;
+			}
+			else if (data.hasOwnProperty('error')) {
+				botResponse = data.error;
+			}
+			// send message as a reply
+			msg.reply(botResponse);
 		}
 		// message collectors for each regex
 		if (doge.test(msg.content)) {
@@ -110,11 +139,6 @@ client.on('ready', () => {
 		}
 		if (kangaroo.test(msg.content)) {
 			let img = await request('https://some-random-api.ml/animal/kangaroo');
-			img = await getJSONResponse(img.body);
-			msg.channel.send(img['image']);
-		}
-		if (kulli.test(msg.content)) {
-			let img = await request('http://dicks-api.herokuapp.com/dicks/2');
 			img = await getJSONResponse(img.body);
 			msg.channel.send(img['image']);
 		}
