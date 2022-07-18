@@ -5,6 +5,7 @@ const fetch = require('cross-fetch');
 const { Client, Intents, Collection } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
+const { maxHeaderSize } = require('node:http');
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
@@ -48,12 +49,12 @@ client.on('ready', () => {
 			const animetyty = await request(`${waifuAPI.url}${type}/${category}`);
 			return await getJSONResponse(animetyty.body);
 		}
-		else {
-			const index = Math.floor(Math.random() * waifuAPI[type].length);
-			const category = waifuAPI[type][index];
-			const payload = await request(`${waifuAPI.url}${type}/${category}`);
-			return await getJSONResponse(payload.body);
-		}
+		// else {
+		// 	const index = Math.floor(Math.random() * waifuAPI[type].length);
+		// 	const category = waifuAPI[type][index];
+		// 	const payload = await request(`${waifuAPI.url}${type}/${category}`);
+		// 	return await getJSONResponse(payload.body);
+		// }
 	}
 
 	// const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
@@ -74,7 +75,7 @@ client.on('ready', () => {
 			// form payload
 			const payload = {
 				inputs: {
-					text: parseMention(msg.content),
+					text: prepareData(msg.content),
 				},
 			};
 			// form the request headers with Hugging Face API key
@@ -146,24 +147,24 @@ client.on('ready', () => {
 			msg.channel.send(img['image']);
 		}
 		// random anime tyts
-		if (Math.random() > 0.5) {
-			const randomTimeout = Math.random() * 7200 * 1000;
-			console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
-			let image;
-			if (randomTimeout % 3 < 1) {
-				image = await requestBuilder('nsfw');
-			}
-			else {
-				image = await requestBuilder('sfw');
-			}
-			console.log('image url: ' + image['url']);
-			setTimeout(() => {
-				const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
-				const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-				console.log('randommsg:' + randomMsg);
-				genshinChannel.send(`${randomMsg}\n ${image['url']}\n`);
-			}, randomTimeout);
-		}
+		// if (Math.random() > 0.5) {
+		// 	const randomTimeout = Math.random() * 7200 * 1000;
+		// 	console.log('starting random image function timeout for ' + randomTimeout + ' seconds');
+		// 	let image;
+		// 	if (randomTimeout % 3 < 1) {
+		// 		image = await requestBuilder('nsfw');
+		// 	}
+		// 	else {
+		// 		image = await requestBuilder('sfw');
+		// 	}
+		// 	console.log('image url: ' + image['url']);
+		// 	setTimeout(() => {
+		// 		const msgs = ['tää on mun tyttö ystävä :3', 'tää tekee tällee', 'tämmöne', 'huhhuh', '2D girls >', 'Ois saaatana', 'NONNIIIIIH'];
+		// 		const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+		// 		console.log('randommsg:' + randomMsg);
+		// 		genshinChannel.send(`${randomMsg}\n ${image['url']}\n`);
+		// 	}, randomTimeout);
+		// }
 		// mans typing in bot/genshin
 		if (msg.channel === genshinChannel || msg.channel === botChannel) {
 			// random bonk
@@ -251,14 +252,14 @@ client.on('interactionCreate', async interaction => {
 
 client.login(token);
 
-function parseMention(msg) {
+function prepareData(msg) {
 	console.log(msg);
 	const indexOfMention = msg.indexOf('>');
 	console.log(indexOfMention);
 	if (indexOfMention === -1) {
 		return '';
 	}
-	const content = msg.substring(indexOfMention + 1);
+	const content = msg.substring(indexOfMention + 1) + msg.author.name;
 	console.log('content: ' + content);
 	return content;
 }
