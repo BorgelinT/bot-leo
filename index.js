@@ -74,7 +74,7 @@ client.on('ready', () => {
 			// form payload
 			const payload = {
 				inputs: {
-					text: prepareData(msg.content, msg.author.username),
+					text: prepareData(msg.content),
 				},
 			};
 			// form the request headers with Hugging Face API key
@@ -251,14 +251,14 @@ client.on('interactionCreate', async interaction => {
 
 client.login(token);
 
-function prepareData(msg, username) {
+function prepareData(msg) {
 	console.log(msg);
 	const indexOfMention = msg.indexOf('>');
 	console.log(indexOfMention);
 	if (indexOfMention === -1) {
 		return '';
 	}
-	const content = msg.substring(indexOfMention + 1) + username;
+	const content = msg.substring(indexOfMention + 1);
 	console.log('content: ' + content);
 	return content;
 }
