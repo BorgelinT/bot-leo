@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const fetch = require('cross-fetch');
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, Intents, Collection, MessageMentions: { USERS_PATTERN } } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
 
@@ -74,7 +74,7 @@ client.on('ready', () => {
 			// form payload
 			const payload = {
 				inputs: {
-					text: msg.content,
+					text: parseMention(msg.content),
 				},
 			};
 			// form the request headers with Hugging Face API key
@@ -247,3 +247,11 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.login(token);
+
+function parseMention(mention) {
+	const matches = mention.matchAll(USERS_PATTERN).next().value;
+	if (!matches) return;
+
+	delete matches[0];
+	return matches;
+}
