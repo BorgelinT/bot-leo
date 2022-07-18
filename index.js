@@ -258,7 +258,7 @@ function prepareData(msg) {
 	if (indexOfMention === -1) {
 		return '';
 	}
-	const content = msg.substring(indexOfMention + 1) + msg.author.name;
+	const content = msg.substring(indexOfMention + 1) + msg.author.username;
 	console.log('content: ' + content);
 	return content;
 }
