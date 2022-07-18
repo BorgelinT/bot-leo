@@ -5,7 +5,6 @@ const fetch = require('cross-fetch');
 const { Client, Intents, Collection } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
-const { maxHeaderSize } = require('node:http');
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
