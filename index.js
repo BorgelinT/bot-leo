@@ -5,6 +5,7 @@ const fetch = require('cross-fetch');
 const { Client, Intents, Collection, MessageMentions: { USERS_PATTERN } } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
+const { connect } = require('node:http2');
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
@@ -81,6 +82,8 @@ client.on('ready', () => {
 			const headers = {
 				'Authorization': 'Bearer ' + HuggingFaceAPIKey,
 			};
+			// set status as typing
+			msg.channel.sendTyping();
 
 			const response = await fetch(leksa_api, {
 				method: 'post',
@@ -96,6 +99,7 @@ client.on('ready', () => {
 				botResponse = data.error;
 			}
 			// send message as a reply
+			console.log(botResponse);
 			msg.reply(botResponse);
 		}
 		// message collectors for each regex
@@ -248,10 +252,14 @@ client.on('interactionCreate', async interaction => {
 
 client.login(token);
 
-function parseMention(mention) {
-	const matches = mention.matchAll(USERS_PATTERN).next().value;
-	if (!matches) return;
-
-	delete matches[0];
-	return matches;
+function parseMention(msg) {
+	console.log(msg);
+	const indexOfMention = msg.indexOf('>');
+	console.log(indexOfMention);
+	if (indexOfMention === -1) {
+		return '';
+	}
+	const content = msg.substring(indexOfMention + 1);
+	console.log('content: ' + content);
+	return content;
 }
