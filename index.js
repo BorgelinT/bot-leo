@@ -2,10 +2,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const fetch = require('cross-fetch');
-const { Client, Intents, Collection, MessageMentions: { USERS_PATTERN } } = require('discord.js');
+const { Client, Intents, Collection } = require('discord.js');
 const { request } = require('undici');
 const { token, roles, waifuAPI, HuggingFaceAPIKey } = require('./config.json');
-const { connect } = require('node:http2');
 
 const client = new Client({
 	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
@@ -57,8 +56,8 @@ client.on('ready', () => {
 		}
 	}
 
-	const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
-	const nsfw = /^nsfw$|^hentai$/i;
+	// const re = /anime|^2d$|2d |2d-|animetyty|owo|uwu|waifu/i;
+	// const nsfw = /^nsfw$|^hentai$/i;
 	const doge = /dog|doge|shiba|shibe|koira|hau|koiro/i;
 	const cat = /kitten|kissa|kassi|miau|:3|miu|cat/i;
 	const duck = /duck|ankka|kvaak|ankk/i;
@@ -173,17 +172,17 @@ client.on('ready', () => {
 				msg.reply('<@' + msg.author.id + '> just got bonked !!! 🆘\n' + image['url'] + '\n');
 			}
 			// matches sfw regex
-			if (re.test(msg.content)) {
-				msg.react('😳');
-				const image = await requestBuilder('sfw');
-				msg.channel.send(image['url']);
-			}
-			// matches nsfw regex
-			else if (nsfw.test(msg.content)) {
-				msg.react('🥵');
-				const image = await requestBuilder('nsfw');
-				msg.channel.send(`|| ${image['url']} ||`);
-			}
+			// if (re.test(msg.content)) {
+			// 	msg.react('😳');
+			// 	const image = await requestBuilder('sfw');
+			// 	msg.channel.send(image['url']);
+			// }
+			// // matches nsfw regex
+			// else if (nsfw.test(msg.content)) {
+			// 	msg.react('🥵');
+			// 	const image = await requestBuilder('nsfw');
+			// 	msg.channel.send(`|| ${image['url']} ||`);
+			// }
 		}
 	});
 
