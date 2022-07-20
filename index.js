@@ -14,7 +14,7 @@ const client = new Client({
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-const leksa_api = 'https://api-inference.huggingface.co/models/Thoumey/DialoGPT-small-Leksa';
+const leksa_api = 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-large';
 
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
@@ -197,7 +197,7 @@ client.on('ready', () => {
 		collector.on('collect', (reaction, user) => {
 			console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
 			message.guild.members.fetch(user.id).then(member => {
-				member.roles.add(roles[reaction.emoji.name]);
+				member.roles.remove('261768424215150597');
 			});
 		});
 	});
