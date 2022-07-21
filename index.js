@@ -63,7 +63,6 @@ client.on('ready', () => {
 	const redpanda = /kultapanda|red panda|panda|pikkupanda/i;
 	const raccoon = /pesukarhu|thieving|rocky|raccoon|sly/i;
 	const kangaroo = /kenguru|australia|boing|kangaroo/i;
-	const kulli = /cock|kulli|pippeli/i;
 
 	client.on('messageCreate', async msg => {
 		if (msg.author.id === '982274221541580912' || msg.channelId === '370233724811345921') {
@@ -110,11 +109,6 @@ client.on('ready', () => {
 		}
 		if (kangaroo.test(msg.content)) {
 			let img = await request('https://some-random-api.ml/animal/kangaroo');
-			img = await getJSONResponse(img.body);
-			msg.channel.send(img['image']);
-		}
-		if (kulli.test(msg.content)) {
-			let img = await request('http://dicks-api.herokuapp.com/dicks/2');
 			img = await getJSONResponse(img.body);
 			msg.channel.send(img['image']);
 		}
